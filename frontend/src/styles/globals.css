@@ -1,0 +1,235 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ── Palette OpenLab Consulting ── */
+    --orange:       #FF5500;
+    --orange-deep:  #CC3300;
+    --orange-soft:  #FFF0E6;
+    --ink:          #0A0A0A;
+    --ink-soft:     #3D3D3D;
+    --ink-mute:     #888888;
+    --bone:         #FFFFFF;
+    --bone-dark:    #F5F5F5;
+    --bone-card:    #FAFAFA;
+    --line:         #E5E5E5;
+
+    /* shadcn tokens */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 4%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 4%;
+    --primary: 20 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 4%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 53%;
+    --accent: 20 100% 96%;
+    --accent-foreground: 20 100% 30%;
+    --destructive: 0 84% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 20 100% 50%;
+    --radius: 0.5rem;
+  }
+
+  * { @apply border-border; }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bone);
+    color: var(--ink);
+    font-family: "Inter", "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-feature-settings: "cv11";
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Space Grotesk", "Inter", sans-serif;
+    letter-spacing: -0.03em;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  ::selection {
+    background-color: var(--orange);
+    color: #fff;
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 8px;
+    border: 2px solid var(--bone);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ink-mute); }
+}
+
+@layer components {
+  /* ── Conteneur responsive ── */
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* ── Bouton principal orange ── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2
+           px-6 py-3 sm:px-8 sm:py-3.5
+           text-[14px] sm:text-[15px] font-semibold tracking-tight
+           rounded-full transition-all duration-200;
+    background-color: var(--orange);
+    color: #fff;
+    box-shadow: 0 4px 16px -4px rgba(255,85,0,0.45);
+  }
+  .btn-primary:hover {
+    background-color: var(--orange-deep);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px -6px rgba(255,85,0,0.5);
+  }
+  .btn-primary:active { transform: translateY(0); }
+
+  /* ── Bouton ghost ── */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2
+           px-4 py-2 text-[14px] font-medium tracking-tight
+           rounded-full transition-all duration-150;
+    color: var(--ink-soft);
+  }
+  .btn-ghost:hover {
+    color: var(--ink);
+    background-color: var(--bone-dark);
+  }
+
+  /* alias legacy */
+  .btn-clay { @apply btn-primary; }
+
+  /* ── Carte ── */
+  .paper {
+    background-color: var(--bone-card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+
+  /* ── Badge / Pill ── */
+  .pill {
+    @apply inline-flex items-center gap-2 px-3 py-1
+           text-[11px] font-semibold uppercase tracking-[0.12em];
+    color: var(--orange);
+    border: 1px solid rgba(255,85,0,0.3);
+    border-radius: 999px;
+    background-color: var(--orange-soft);
+  }
+  .pill-clay { /* alias — conservé pour compatibilité */ }
+
+  /* ── Headline hero ── */
+  .hero-headline {
+    font-family: "Space Grotesk", "Inter", sans-serif;
+    font-weight: 800;
+    line-height: 0.93;
+    letter-spacing: -0.04em;
+  }
+  .hero-headline em {
+    font-style: normal;
+    font-weight: 800;
+    color: var(--orange);
+  }
+
+  /* ── Numéro de question ── */
+  .question-number {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 800;
+    color: var(--orange);
+    letter-spacing: -0.05em;
+    line-height: 0.85;
+    opacity: 0.15;
+  }
+
+  /* ── Chiffres tabulaires ── */
+  .tabular {
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-feature-settings: "tnum";
+    letter-spacing: -0.02em;
+  }
+
+  /* ── Séparateurs ── */
+  .rule { border: none; height: 1px; background-color: var(--line); }
+  .rule-orange { border: none; height: 3px; width: 40px; background-color: var(--orange); border-radius: 2px; }
+  .rule-clay { @apply rule-orange; }
+
+  /* ── Carte réponse questionnaire ── */
+  .answer-card {
+    @apply relative w-full text-left flex items-center gap-4 px-5 py-4 sm:px-6 sm:py-5
+           transition-all duration-150;
+    background-color: var(--bone-card);
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    color: var(--ink);
+  }
+  .answer-card::before {
+    content: "";
+    @apply absolute left-0 top-0 bottom-0 w-1 rounded-l-[10px] transition-all duration-150;
+    background-color: transparent;
+  }
+  .answer-card:hover {
+    border-color: var(--orange);
+    transform: translateX(3px);
+    box-shadow: 0 2px 12px -4px rgba(255,85,0,0.2);
+  }
+  .answer-card:hover::before { background-color: var(--orange); }
+  .answer-card[data-selected="true"] {
+    background-color: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+  .answer-card[data-selected="true"]::before { background-color: var(--orange); }
+
+  .answer-key {
+    @apply flex items-center justify-center w-7 h-7 text-[12px] font-bold
+           transition-colors duration-150 shrink-0;
+    font-family: "JetBrains Mono", monospace;
+    border: 1.5px solid var(--line);
+    border-radius: 6px;
+    color: var(--ink-soft);
+    background-color: var(--bone);
+  }
+  .answer-card[data-selected="true"] .answer-key {
+    background-color: var(--orange);
+    color: #fff;
+    border-color: var(--orange);
+  }
+
+  /* ── Barre de progression ── */
+  .progress-track {
+    @apply relative w-full h-1 rounded-full overflow-hidden;
+    background-color: var(--line);
+  }
+  .progress-fill {
+    @apply absolute inset-y-0 left-0 rounded-full transition-all duration-500;
+    background-color: var(--orange);
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-pretty  { text-wrap: pretty; }
+  .text-orange  { color: var(--orange); }
+  .bg-orange    { background-color: var(--orange); }
+}

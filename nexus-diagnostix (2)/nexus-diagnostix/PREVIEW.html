@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nexus·Diagnostix — Aperçu du nouveau design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bone:        #F4EFE6;
+    --bone-dark:   #ECE5D8;
+    --bone-card:   #FAF6EE;
+    --ink:         #181613;
+    --ink-soft:    #4A4640;
+    --ink-mute:    #8A847A;
+    --clay:        #C8553D;
+    --clay-deep:   #A03E2C;
+    --clay-soft:   #E8C5B8;
+    --line:        #D9D2C2;
+  }
+  *  { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-font-smoothing: antialiased; }
+  body {
+    background: var(--bone);
+    color: var(--ink);
+    font-family: "Geist", sans-serif;
+    letter-spacing: -0.01em;
+    background-image: radial-gradient(circle at 1px 1px, rgba(24,22,19,0.025) 1px, transparent 0);
+    background-size: 24px 24px;
+  }
+  h1, h2, h3 {
+    font-family: "Fraunces", serif;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+  .preview-strip {
+    background: var(--ink);
+    color: var(--bone);
+    padding: 16px 0;
+    text-align: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px;
+    font-size: 11px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+  }
+  .pill::before {
+    content: ""; width: 6px; height: 6px;
+    background: var(--clay); border-radius: 50%;
+  }
+  .mono { font-family: "JetBrains Mono", monospace; }
+  .tabular { font-family: "JetBrains Mono", monospace; font-feature-settings: "tnum"; }
+  .btn-clay {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px;
+    font-size: 15px; font-weight: 500;
+    background: var(--ink); color: var(--bone);
+    border-radius: 999px; border: 0;
+    cursor: pointer;
+    transition: all .3s;
+  }
+  .btn-clay:hover {
+    background: var(--clay-deep);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px -8px rgba(160,62,44,.4);
+  }
+  .frame {
+    background: var(--bone);
+    border: 1px solid var(--line);
+    margin: 64px auto;
+    max-width: 1180px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px -20px rgba(24,22,19,.15);
+  }
+  .frame-label {
+    background: var(--bone-dark);
+    border-bottom: 1px solid var(--line);
+    padding: 12px 20px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.2em;
+    color: var(--ink-mute);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .frame-label .dots { display: flex; gap: 6px; }
+  .frame-label .dots span {
+    width: 11px; height: 11px; border-radius: 50%;
+    background: var(--line);
+  }
+
+  /* Top bar style */
+  .topbar {
+    border-bottom: 1px solid var(--line);
+    padding: 18px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .logo { display: flex; align-items: baseline; gap: 8px; }
+  .logo-name { font-family: "Fraunces", serif; font-size: 20px; font-weight: 500; }
+  .logo-sub { font-family: "JetBrains Mono", monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--clay); }
+
+  /* ============ SCREEN 1: Landing Hero ============ */
+  .hero {
+    padding: 80px 32px 100px;
+    max-width: 1180px; margin: 0 auto;
+  }
+  .hero h1 {
+    font-family: "Fraunces", serif;
+    font-weight: 400;
+    font-variation-settings: "opsz" 144;
+    font-size: clamp(2.75rem, 7vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-top: 40px;
+    max-width: 950px;
+    text-wrap: balance;
+  }
+  .hero h1 em {
+    font-style: italic; font-weight: 300; color: var(--clay);
+  }
+  .hero-grid {
+    display: grid; grid-template-columns: repeat(12, 1fr);
+    gap: 64px; margin-top: 80px; align-items: end;
+  }
+  .hero-grid > p {
+    grid-column: 1 / span 7;
+    font-size: 19px; line-height: 1.55; color: var(--ink-soft);
+    text-wrap: pretty;
+  }
+  .hero-grid > p strong { color: var(--ink); font-weight: 500; }
+  .hero-cta { margin-top: 36px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .hero-cta-meta { font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--ink-mute); }
+  .indicators {
+    grid-column: 9 / span 4;
+    border-left: 1px solid var(--line);
+    padding-left: 32px;
+    display: flex; flex-direction: column; gap: 24px;
+  }
+  .indicator-value { font-family: "JetBrains Mono", monospace; font-size: 36px; font-weight: 500; line-height: 1; }
+  .indicator-label { font-size: 13px; color: var(--ink-mute); margin-top: 4px; }
+
+  /* ============ SCREEN 2: Question ============ */
+  .progress-bar {
+    height: 1px; background: var(--line); position: relative;
+  }
+  .progress-bar::after {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 25%; background: var(--clay);
+    box-shadow: 0 0 0 0.5px var(--clay);
+  }
+  .question-grid {
+    display: grid; grid-template-columns: repeat(12, 1fr);
+    gap: 48px;
+    padding: 80px 32px;
+    max-width: 1180px; margin: 0 auto;
+  }
+  .question-number {
+    grid-column: 1 / span 3;
+    font-family: "Fraunces", serif;
+    font-weight: 300; font-style: italic;
+    color: var(--clay);
+    font-size: 14rem; line-height: 0.85;
+    letter-spacing: -0.05em;
+  }
+  .question-content {
+    grid-column: 5 / span 8;
+  }
+  .question-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em;
+    color: var(--clay);
+  }
+  .question-label {
+    font-family: "Fraunces", serif;
+    font-weight: 300; font-style: normal;
+    font-size: 38px; line-height: 1.15; letter-spacing: -0.02em;
+    margin-top: 16px;
+    text-wrap: balance;
+  }
+  .answer-list { margin-top: 48px; display: flex; flex-direction: column; gap: 12px; max-width: 640px; }
+  .answer-card {
+    position: relative;
+    display: flex; align-items: center; gap: 20px;
+    padding: 22px 24px;
+    background: var(--bone-card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all .2s;
+    text-align: left;
+  }
+  .answer-card::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4px; background: transparent;
+    transition: all .2s;
+  }
+  .answer-card:hover { border-color: var(--ink); transform: translateX(4px); }
+  .answer-card:hover::before { background: var(--clay); }
+  .answer-card.selected { background: var(--ink); color: var(--bone); border-color: var(--ink); }
+  .answer-card.selected::before { background: var(--clay); }
+  .answer-key {
+    display: flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px;
+    font-family: "JetBrains Mono", monospace; font-size: 12px;
+    border: 1px solid var(--line); border-radius: 4px;
+    color: var(--ink-soft); background: var(--bone);
+  }
+  .answer-card.selected .answer-key {
+    background: var(--clay); color: var(--bone); border-color: var(--clay);
+  }
+  .answer-text { font-size: 16px; font-weight: 500; }
+  .answer-helper { display: block; margin-top: 2px; font-size: 12px; opacity: 0.6; font-weight: 400; }
+
+  /* ============ SCREEN 3: Report ============ */
+  .report-hero { padding: 80px 32px 40px; max-width: 1180px; margin: 0 auto; }
+  .report-hero h1 {
+    font-family: "Fraunces", serif; font-weight: 300;
+    font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1.05;
+    letter-spacing: -0.03em; margin-top: 24px;
+    text-wrap: balance;
+  }
+  .report-hero h1 em { font-style: italic; color: var(--clay); font-weight: 200; }
+  .score-grid {
+    display: grid; grid-template-columns: repeat(12, 1fr);
+    gap: 64px; padding: 0 32px 80px;
+    max-width: 1180px; margin: 0 auto;
+    align-items: end;
+  }
+  .score-main { grid-column: 1 / span 6; }
+  .score-meta { font-family: "JetBrains Mono", monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--ink-mute); }
+  .score-value { font-family: "Fraunces", serif; font-feature-settings: "tnum"; font-size: 160px; font-weight: 500; line-height: 1; margin-top: 12px; }
+  .score-value-suffix { color: var(--ink-mute); font-size: 40px; font-weight: 300; }
+  .rule-clay { width: 32px; height: 2px; background: var(--clay); border: 0; margin: 32px 0 16px; }
+  .score-level { font-size: 13px; color: var(--ink-soft); }
+  .score-level strong { color: var(--ink); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  .subscores {
+    grid-column: 7 / span 6;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line);
+  }
+  .subscore { background: var(--bone-card); padding: 24px; }
+  .subscore-label { font-family: "JetBrains Mono", monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--ink-mute); margin-bottom: 12px; }
+  .subscore-row { display: flex; align-items: baseline; gap: 4px; }
+  .subscore-value { font-family: "Fraunces", serif; font-feature-settings: "tnum"; font-size: 36px; font-weight: 500; line-height: 1; }
+  .subscore-suffix { font-size: 12px; color: var(--ink-mute); }
+  .subscore-bar { margin-top: 16px; height: 1px; background: var(--line); position: relative; }
+  .subscore-bar > span { position: absolute; left: 0; top: 0; bottom: 0; background: var(--clay); }
+
+  .exposure-section { padding: 0 32px 80px; max-width: 1180px; margin: 0 auto; }
+  .exposure-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 32px;
+  }
+  .exposure-head h2 { font-family: "Fraunces", serif; font-weight: 300; font-size: 32px; }
+  .exposure-card {
+    background: var(--bone-card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 48px;
+  }
+  .exposure-amount {
+    font-family: "Fraunces", serif; font-feature-settings: "tnum";
+    font-size: clamp(3rem, 8vw, 5.5rem); font-weight: 500; line-height: 1;
+  }
+  .exposure-amount .clay { color: var(--clay); }
+  .exposure-text { margin-top: 24px; font-size: 14px; color: var(--ink-soft); max-width: 640px; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div class="preview-strip">
+  Aperçu du nouveau design Nexus·Diagnostix · 3 écrans clés
+</div>
+
+<!-- ============ SCREEN 1: Landing ============ -->
+<div class="frame">
+  <div class="frame-label">
+    <span class="dots"><span></span><span></span><span></span></span>
+    <span>Écran 1 — Landing</span>
+    <span></span>
+  </div>
+  <div class="topbar">
+    <div class="logo"><span class="logo-name">Nexus</span><span class="logo-sub">Diagnostix</span></div>
+    <div style="font-family: 'JetBrains Mono'; font-size: 12px; color: var(--ink-mute);">Méthode · Pourquoi · Admin</div>
+  </div>
+
+  <div class="hero">
+    <span class="pill">Édition Côte d'Ivoire · 2026</span>
+    <h1>Le diagnostic RH&nbsp;<em>vraiment</em> taillé<br/>pour vos réalités.</h1>
+
+    <div class="hero-grid">
+      <p>
+        Vingt questions, cinq minutes. Un rapport qui chiffre vos risques de redressement
+        <strong>CNPS</strong> et <strong>DGI</strong>, mesure votre écart au standard
+        IA-Native, et propose trois actions prioritaires signées par notre IA experte du
+        droit ivoirien.
+      </p>
+
+      <div class="indicators">
+        <div>
+          <div class="indicator-value">20</div>
+          <div class="indicator-label">questions</div>
+        </div>
+        <div>
+          <div class="indicator-value">4</div>
+          <div class="indicator-label">dimensions évaluées</div>
+        </div>
+        <div>
+          <div class="indicator-value">100%</div>
+          <div class="indicator-label">conforme ARTCI</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-cta" style="grid-column: 1 / span 7; margin-top: 40px; display: flex; align-items: center; gap: 16px;">
+      <button class="btn-clay">Commencer le diagnostic →</button>
+      <span class="hero-cta-meta">≈ 5 min · gratuit · sans engagement</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCREEN 2: Question ============ -->
+<div class="frame">
+  <div class="frame-label">
+    <span class="dots"><span></span><span></span><span></span></span>
+    <span>Écran 2 — Question (Typeform-style)</span>
+    <span></span>
+  </div>
+  <div class="topbar" style="padding: 14px 32px;">
+    <div class="logo"><span class="logo-name" style="font-size: 16px;">Nexus</span><span class="logo-sub">Diagnostix</span></div>
+    <div style="display: flex; align-items: center; gap: 24px;">
+      <span class="mono" style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--ink-mute);">Conformité sociale</span>
+      <span class="tabular" style="font-size: 12px; color: var(--ink-soft);"><strong>5</strong> <span style="color: var(--ink-mute);">/ 20</span></span>
+    </div>
+  </div>
+  <div class="progress-bar"></div>
+
+  <div class="question-grid">
+    <div class="question-number">05</div>
+    <div class="question-content">
+      <div class="question-meta">Q05</div>
+      <h2 class="question-label">
+        Vos DISA sont-elles générées automatiquement sans retraitement Excel ?
+      </h2>
+
+      <div class="answer-list">
+        <button class="answer-card selected">
+          <span class="answer-key">1</span>
+          <span class="answer-text">
+            Oui
+            <span class="answer-helper">Pleinement en place</span>
+          </span>
+        </button>
+        <button class="answer-card">
+          <span class="answer-key">2</span>
+          <span class="answer-text">
+            Partiellement
+            <span class="answer-helper">Mise en place en cours</span>
+          </span>
+        </button>
+        <button class="answer-card">
+          <span class="answer-key">3</span>
+          <span class="answer-text">
+            Non
+            <span class="answer-helper">Pas encore</span>
+          </span>
+        </button>
+      </div>
+
+      <p style="margin-top: 32px; font-size: 11px; color: var(--ink-mute);">
+        Tapez <kbd style="display:inline-flex; align-items:center; min-width:20px; padding: 2px 6px; font-family: 'JetBrains Mono'; font-size: 10px; background: var(--bone-card); border: 1px solid var(--line); border-radius: 3px;">1</kbd>
+        ou <kbd style="display:inline-flex; align-items:center; min-width:20px; padding: 2px 6px; font-family: 'JetBrains Mono'; font-size: 10px; background: var(--bone-card); border: 1px solid var(--line); border-radius: 3px;">2</kbd>
+        ou <kbd style="display:inline-flex; align-items:center; min-width:20px; padding: 2px 6px; font-family: 'JetBrains Mono'; font-size: 10px; background: var(--bone-card); border: 1px solid var(--line); border-radius: 3px;">3</kbd>
+        pour répondre
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCREEN 3: Report ============ -->
+<div class="frame">
+  <div class="frame-label">
+    <span class="dots"><span></span><span></span><span></span></span>
+    <span>Écran 3 — Rapport</span>
+    <span></span>
+  </div>
+  <div class="topbar">
+    <div class="logo"><span class="logo-name">Nexus</span><span class="logo-sub">Diagnostix</span></div>
+    <span class="mono" style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--ink-mute);">Rapport · 8f3e-4b21</span>
+  </div>
+
+  <div class="report-hero">
+    <span class="pill">Rapport</span>
+    <h1>Votre <em>diagnostic</em> est prêt.</h1>
+  </div>
+
+  <div class="score-grid">
+    <div class="score-main">
+      <div class="score-meta">Score global</div>
+      <div>
+        <span class="score-value">47</span><span class="score-value-suffix"> / 100</span>
+      </div>
+      <hr class="rule-clay" />
+      <p class="score-level">Niveau de maturité — <strong>Émergent</strong></p>
+    </div>
+
+    <div class="subscores">
+      <div class="subscore">
+        <div class="subscore-label">Fiscalité</div>
+        <div class="subscore-row"><span class="subscore-value">60</span><span class="subscore-suffix">/100</span></div>
+        <div class="subscore-bar"><span style="width: 60%;"></span></div>
+      </div>
+      <div class="subscore">
+        <div class="subscore-label">Sociale</div>
+        <div class="subscore-row"><span class="subscore-value">40</span><span class="subscore-suffix">/100</span></div>
+        <div class="subscore-bar"><span style="width: 40%;"></span></div>
+      </div>
+      <div class="subscore">
+        <div class="subscore-label">Conformité</div>
+        <div class="subscore-row"><span class="subscore-value">50</span><span class="subscore-suffix">/100</span></div>
+        <div class="subscore-bar"><span style="width: 50%;"></span></div>
+      </div>
+      <div class="subscore">
+        <div class="subscore-label">Digitale</div>
+        <div class="subscore-row"><span class="subscore-value">35</span><span class="subscore-suffix">/100</span></div>
+        <div class="subscore-bar"><span style="width: 35%;"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="exposure-section">
+    <div class="exposure-head">
+      <h2>Exposition financière estimée</h2>
+      <span class="mono" style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--ink-mute);">en cas de contrôle</span>
+    </div>
+    <div class="exposure-card">
+      <div class="exposure-amount">18&nbsp;500&nbsp;000 <span class="clay">FCFA</span></div>
+      <p class="exposure-text">
+        Estimation cumulative des risques de redressement CNPS et DGI identifiés par notre
+        moteur d'analyse, sur la base de vos réponses et des barèmes en vigueur.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div style="text-align: center; padding: 80px 32px; max-width: 800px; margin: 0 auto;">
+  <h2 style="font-family: 'Fraunces'; font-weight: 300; font-size: 28px; line-height: 1.2;">
+    Trois écrans. Une <em style="font-style: italic; color: var(--clay);">direction artistique</em> cohérente.
+  </h2>
+  <p style="margin-top: 20px; color: var(--ink-soft); font-size: 15px; line-height: 1.7;">
+    Palette terre-cuite + ivoire chaud · Typographie éditoriale (Fraunces + Geist) ·
+    Espace blanc généreux · Animations Framer Motion fluides · Raccourcis clavier
+    pour le power-user · Conformité ARTCI mot pour mot.
+  </p>
+</div>
+
+</body>
+</html>

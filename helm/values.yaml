@@ -1,0 +1,198 @@
+# =============================================================================
+# Nexus-Diagnostix — Helm Values (defaults, no secrets)
+# Override with values-production.yaml + values-secret.yaml
+# =============================================================================
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Images GHCR
+image:
+  backend:
+    repository: ghcr.io/couldevlop/nexus-diagnostix-backend
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  frontend:
+    repository: ghcr.io/couldevlop/nexus-diagnostix-frontend
+    tag: "latest"
+    pullPolicy: IfNotPresent
+
+# Secret pour tirer les images depuis GHCR
+imagePullSecrets:
+  - name: ghcr-secret
+
+# ---------------------------------------------------------------------------
+# Configuration applicative (non-sensible → ConfigMap)
+# ---------------------------------------------------------------------------
+app:
+  environment: production
+  logLevel: INFO
+  apiHost: "0.0.0.0"
+  apiPort: "8000"
+  allowedOrigins: "https://diagnostix.openlabconsulting.com"
+  reportsStoragePath: /var/data/reports
+  reportsRetentionDays: "730"
+  mlModelsPath: /app/ml_artifacts
+  mlMinConfidence: "0.60"
+  rateLimitPublicPerMinute: "60"
+  rateLimitLoginPerMinute: "10"
+  rateLimitAdminPerMinute: "600"
+  pdfUrlTtlDays: "7"
+  jwtAlgorithm: HS256
+  jwtAccessTokenExpireMinutes: "480"
+  jwtRefreshTokenExpireDays: "30"
+  passwordMinLength: "12"
+  bcryptRounds: "12"
+  claudeModelExpert: claude-opus-4-7
+  claudeModelChat: claude-sonnet-4-6
+  claudeMaxTokens: "2000"
+  claudeTemperature: "0.3"
+  claudeTimeoutSeconds: "30"
+  smtpHost: smtp.gmail.com
+  smtpPort: "587"
+
+# ---------------------------------------------------------------------------
+# Secrets (valeurs à surcharger dans values-secret.yaml — jamais committées)
+# ---------------------------------------------------------------------------
+secrets:
+  postgresUser: nexus
+  postgresPassword: ""        # REQUIS
+  postgresDb: nexus_diagnostix
+  secretKey: ""               # REQUIS — 32 chars min
+  fieldEncryptionKey: ""      # REQUIS — clé Fernet base64
+  pdfSigningSecret: ""        # REQUIS — 32 chars min
+  anthropicApiKey: ""         # REQUIS
+  smtpUser: ""
+  smtpPass: ""
+  smtpFrom: "Nexus-Diagnostix <noreply@openlabconsulting.com>"
+  initialAdminEmail: admin@openlabconsulting.com
+  initialAdminPassword: ""    # REQUIS
+
+# ---------------------------------------------------------------------------
+# Backend
+# ---------------------------------------------------------------------------
+backend:
+  replicaCount: 1
+
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+
+  persistence:
+    reports:
+      size: 10Gi
+      storageClass: ""          # laisser vide pour le StorageClass par défaut
+    ml:
+      size: 2Gi
+      storageClass: ""
+
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: 8000
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    failureThreshold: 3
+
+  readinessProbe:
+    httpGet:
+      path: /readyz
+      port: 8000
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    failureThreshold: 5
+
+# ---------------------------------------------------------------------------
+# Frontend
+# ---------------------------------------------------------------------------
+frontend:
+  replicaCount: 1
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+# ---------------------------------------------------------------------------
+# PostgreSQL (Bitnami subchart)
+# IMPORTANT : postgresql.auth.password DOIT correspondre à secrets.postgresPassword
+# ---------------------------------------------------------------------------
+postgresql:
+  enabled: true
+  auth:
+    username: nexus
+    password: ""          # Surcharger dans values-secret.yaml
+    database: nexus_diagnostix
+  primary:
+    persistence:
+      enabled: true
+      size: 20Gi
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+    podSecurityContext:
+      enabled: true
+      fsGroup: 1001
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+
+# ---------------------------------------------------------------------------
+# Redis (Bitnami subchart) — standalone, sans auth (usage interne cluster)
+# ---------------------------------------------------------------------------
+redis:
+  enabled: true
+  architecture: standalone
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: true
+      size: 2Gi
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 250m
+        memory: 256Mi
+
+# ---------------------------------------------------------------------------
+# Ingress
+# ---------------------------------------------------------------------------
+ingress:
+  enabled: true
+  className: nginx
+  host: diagnostix.openlabconsulting.com
+  tls: true
+  tlsSecretName: diagnostix-tls
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+
+# ---------------------------------------------------------------------------
+# Services
+# ---------------------------------------------------------------------------
+service:
+  backend:
+    type: ClusterIP
+    port: 8000
+  frontend:
+    type: ClusterIP
+    port: 80

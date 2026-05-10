@@ -1,0 +1,25 @@
+apiVersion: v2
+name: nexus-diagnostix
+description: Nexus-Diagnostix — SaaS d'auto-diagnostic de maturité digitale RH
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - rh
+  - diagnostic
+  - saas
+  - openlab
+maintainers:
+  - name: OpenLab Consulting
+    email: cti.intelligency@gmail.com
+
+dependencies:
+  - name: postgresql
+    version: "16.3.3"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: postgresql.enabled
+
+  - name: redis
+    version: "20.6.3"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: redis.enabled

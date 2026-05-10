@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "nexus-diagnostix.configmapName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "nexus-diagnostix.labels" . | nindent 4 }}
+data:
+  ENVIRONMENT: {{ .Values.app.environment | quote }}
+  LOG_LEVEL: {{ .Values.app.logLevel | quote }}
+  API_HOST: {{ .Values.app.apiHost | quote }}
+  API_PORT: {{ .Values.app.apiPort | quote }}
+
+  # Base URL (pour les liens dans les emails / PDF)
+  API_BASE_URL: {{ printf "https://%s" .Values.ingress.host | quote }}
+
+  # CORS
+  ALLOWED_ORIGINS: {{ .Values.app.allowedOrigins | quote }}
+
+  # PostgreSQL (non-sensible)
+  POSTGRES_HOST: {{ include "nexus-diagnostix.postgresHost" . | quote }}
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: {{ .Values.secrets.postgresDb | quote }}
+
+  # Redis
+  REDIS_HOST: {{ include "nexus-diagnostix.redisHost" . | quote }}
+  REDIS_PORT: "6379"
+
+  # Stockage
+  REPORTS_STORAGE_PATH: {{ .Values.app.reportsStoragePath | quote }}
+  REPORTS_RETENTION_DAYS: {{ .Values.app.reportsRetentionDays | quote }}
+  ML_MODELS_PATH: {{ .Values.app.mlModelsPath | quote }}
+  ML_MIN_CONFIDENCE: {{ .Values.app.mlMinConfidence | quote }}
+
+  # Rate limiting
+  RATELIMIT_PUBLIC_PER_MINUTE: {{ .Values.app.rateLimitPublicPerMinute | quote }}
+  RATELIMIT_LOGIN_PER_MINUTE: {{ .Values.app.rateLimitLoginPerMinute | quote }}
+  RATELIMIT_ADMIN_PER_MINUTE: {{ .Values.app.rateLimitAdminPerMinute | quote }}
+
+  # JWT
+  JWT_ALGORITHM: {{ .Values.app.jwtAlgorithm | quote }}
+  JWT_ACCESS_TOKEN_EXPIRE_MINUTES: {{ .Values.app.jwtAccessTokenExpireMinutes | quote }}
+  JWT_REFRESH_TOKEN_EXPIRE_DAYS: {{ .Values.app.jwtRefreshTokenExpireDays | quote }}
+
+  # Sécurité
+  PASSWORD_MIN_LENGTH: {{ .Values.app.passwordMinLength | quote }}
+  BCRYPT_ROUNDS: {{ .Values.app.bcryptRounds | quote }}
+
+  # PDF
+  PDF_URL_TTL_DAYS: {{ .Values.app.pdfUrlTtlDays | quote }}
+
+  # Claude API (non-sensible)
+  CLAUDE_MODEL_EXPERT: {{ .Values.app.claudeModelExpert | quote }}
+  CLAUDE_MODEL_CHAT: {{ .Values.app.claudeModelChat | quote }}
+  CLAUDE_MAX_TOKENS: {{ .Values.app.claudeMaxTokens | quote }}
+  CLAUDE_TEMPERATURE: {{ .Values.app.claudeTemperature | quote }}
+  CLAUDE_TIMEOUT_SECONDS: {{ .Values.app.claudeTimeoutSeconds | quote }}
+
+  # SMTP (non-sensible)
+  SMTP_HOST: {{ .Values.app.smtpHost | quote }}
+  SMTP_PORT: {{ .Values.app.smtpPort | quote }}
+  SMTP_USE_TLS: "true"

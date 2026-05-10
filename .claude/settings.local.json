@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(python -m pip install \"pydantic>=2.11\" \"pydantic-settings>=2.6\" \"pydantic-core>=2.46\" 2>&1 | Select-Object -Last 5)",
+      "PowerShell(New-Item *)",
+      "PowerShell(cd D:\\\\OPENLAB\\\\diagnostix\\\\backend; $env:SECRET_KEY=\"changeme-generate-with-openssl-rand-hex-32\"; $env:FIELD_ENCRYPTION_KEY=\"changeme-generate-fernet-key\"; $env:PDF_SIGNING_SECRET=\"changeme-32-chars-minimum\"; $env:DATABASE_URL=\"postgresql+asyncpg://nexus:nexus_dev_password@localhost:5432/nexus_diagnostix\"; $env:REDIS_URL=\"redis://localhost:6379/0\"; $env:ANTHROPIC_API_KEY=\"sk-ant-test\"; python -c \"from app.main import create_app; app = create_app\\(\\); print\\('App OK, routes:', len\\(app.routes\\)\\)\" 2>&1)",
+      "PowerShell(python -m pip install aiosqlite 2>&1 | Select-Object -Last 3)",
+      "PowerShell(Get-Content *)",
+      "PowerShell(cd D:\\\\OPENLAB\\\\diagnostix\\\\backend; $env:SECRET_KEY=\"test-secret-key-for-unit-tests-only-32-chars\"; $env:FIELD_ENCRYPTION_KEY=\"Vw0w8K9p1J2qR3sT4uV5wX6yZ7AbCdEfGhIjKl9mNoQ=\"; $env:PDF_SIGNING_SECRET=\"test-pdf-signing-secret-32-characters-min\"; $env:ANTHROPIC_API_KEY=\"sk-ant-test\"; $env:ML_MODELS_PATH=\"$\\(pwd\\)\\\\ml_artifacts\"; python -m pytest tests/integration/test_questionnaire_api.py -v --tb=long --timeout=30 2>&1)",
+      "PowerShell(cd D:\\\\OPENLAB\\\\diagnostix\\\\backend; $env:SECRET_KEY=\"test-secret-key-for-unit-tests-only-32-chars\"; $env:FIELD_ENCRYPTION_KEY=\"Vw0w8K9p1J2qR3sT4uV5wX6yZ7AbCdEfGhIjKl9mNoQ=\"; $env:PDF_SIGNING_SECRET=\"test-pdf-signing-secret-32-characters-min\"; $env:ANTHROPIC_API_KEY=\"sk-ant-test\"; $env:ML_MODELS_PATH=\"$\\(pwd\\)\\\\ml_artifacts\"; python -m pytest tests/integration/test_questionnaire_api.py -v --tb=long 2>&1)",
+      "PowerShell(Select-String *)",
+      "PowerShell(cd D:\\\\OPENLAB\\\\diagnostix\\\\backend; $env:SECRET_KEY=\"test-secret-key-for-unit-tests-only-32-chars\"; $env:FIELD_ENCRYPTION_KEY=\"Vw0w8K9p1J2qR3sT4uV5wX6yZ7AbCdEfGhIjKl9mNoQ=\"; $env:PDF_SIGNING_SECRET=\"test-pdf-signing-secret-32-characters-min\"; $env:ANTHROPIC_API_KEY=\"sk-ant-test\"; $env:ML_MODELS_PATH=\"$\\(pwd\\)\\\\ml_artifacts\"; python -m pytest tests/integration/test_questionnaire_api.py -v --tb=short 2>&1)",
+      "PowerShell(cd D:\\\\OPENLAB\\\\diagnostix\\\\backend; $env:SECRET_KEY=\"test-secret-key-for-unit-tests-only-32-chars\"; $env:FIELD_ENCRYPTION_KEY=\"Vw0w8K9p1J2qR3sT4uV5wX6yZ7AbCdEfGhIjKl9mNoQ=\"; $env:PDF_SIGNING_SECRET=\"test-pdf-signing-secret-32-characters-min\"; $env:ANTHROPIC_API_KEY=\"sk-ant-test\"; $env:ML_MODELS_PATH=\"$\\(pwd\\)\\\\ml_artifacts\"; python -m pytest tests/ -v --tb=short -q 2>&1 | Select-Object -Last 20)",
+      "PowerShell(python -c \"import weasyprint; print\\('WeasyPrint', weasyprint.__version__\\)\" 2>&1)",
+      "Bash(python *)",
+      "Bash(dir D:OPENLABdiagnostixfrontendsrc *)",
+      "Bash(Get-ChildItem D:\\\\OPENLAB\\\\diagnostix\\\\frontend -ErrorAction SilentlyContinue)",
+      "Bash(Select-Object Name)",
+      "Bash(npm test *)",
+      "Bash(powershell *)",
+      "PowerShell(cd 'D:\\\\OPENLAB\\\\diagnostix\\\\frontend'; $result = npx vitest run --coverage 2>&1; $exitCode = $LASTEXITCODE; Write-Host \"Exit: $exitCode\"; $result | Select-Object -Last 8 | ForEach-Object { Write-Host $_ })",
+      "Bash(npx vitest *)",
+      "Bash(docker compose *)",
+      "Bash(copy \"D:\\\\OPENLAB\\\\diagnostix\\\\OPENLAB.png\" \"D:\\\\OPENLAB\\\\diagnostix\\\\frontend\\\\public\\\\openlab.png\")",
+      "PowerShell(Copy-Item *)",
+      "Bash(docker-compose restart *)",
+      "Bash(docker-compose logs *)",
+      "Bash(Get-Content D:\\\\OPENLAB\\\\diagnostix\\\\.env)",
+      "Bash(Select-String -NotMatch \"KEY|SECRET|PASSWORD|PASS|TOKEN\")",
+      "Bash(git remote *)",
+      "Bash(git init *)",
+      "Bash(grep -E \"\\\\.env$|secret|password|key\\\\.pem\")",
+      "Bash(git check-ignore *)",
+      "Bash(git add *)"
+    ]
+  }
+}

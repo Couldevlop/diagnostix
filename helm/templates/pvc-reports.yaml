@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "nexus-diagnostix.fullname" . }}-reports
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "nexus-diagnostix.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/resource-policy: keep
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.backend.persistence.reports.size }}
+  {{- if .Values.backend.persistence.reports.storageClass }}
+  storageClassName: {{ .Values.backend.persistence.reports.storageClass }}
+  {{- end }}

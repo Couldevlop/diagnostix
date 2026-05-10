@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Rapport Nexus-Diagnostix — {{ report_id[:8] }}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap');
+
+    :root {
+      --orange: #FF5A1F;
+      --black: #0A0A0A;
+      --gray: #F4F4F5;
+      --red: #DC2626;
+      --yellow: #D97706;
+      --green: #16A34A;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--black);
+      font-size: 10pt;
+      line-height: 1.5;
+    }
+
+    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+
+    /* ---- PAGE DE GARDE ---- */
+    .cover {
+      page-break-after: always;
+      background: var(--black);
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 60px;
+    }
+    .cover-logo { font-size: 24pt; font-weight: 700; color: var(--orange); font-family: 'Space Grotesk', sans-serif; }
+    .cover-title { font-size: 28pt; font-weight: 700; margin: 40px 0 16px; }
+    .cover-subtitle { font-size: 14pt; color: #9CA3AF; }
+    .cover-meta { border-top: 1px solid #374151; padding-top: 24px; }
+    .cover-meta p { color: #D1D5DB; font-size: 10pt; margin-bottom: 4px; }
+    .cover-watermark {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: rotate(-45deg) translate(-50%, -50%);
+      font-size: 72pt;
+      color: rgba(255,255,255,0.04);
+      font-weight: 900;
+      letter-spacing: 8px;
+      pointer-events: none;
+    }
+
+    /* ---- CONTENU ---- */
+    .page { padding: 40px 50px; page-break-before: always; }
+    .section-title {
+      font-size: 16pt;
+      font-weight: 700;
+      color: var(--orange);
+      border-bottom: 2px solid var(--orange);
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+
+    /* ---- SCORE GAUGE ---- */
+    .score-card {
+      background: var(--gray);
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .score-number {
+      font-size: 64pt;
+      font-weight: 700;
+      color: var(--orange);
+      font-family: 'Space Grotesk', sans-serif;
+      line-height: 1;
+    }
+    .score-label { font-size: 10pt; color: #6B7280; margin-top: 4px; }
+    .maturity-badge {
+      display: inline-block;
+      padding: 6px 20px;
+      border-radius: 99px;
+      font-weight: 700;
+      font-size: 12pt;
+      margin-top: 12px;
+      background: var(--orange);
+      color: white;
+    }
+
+    /* ---- SCORES PAR CATÉGORIE ---- */
+    .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+    .cat-card { background: var(--gray); border-radius: 8px; padding: 16px; }
+    .cat-name { font-size: 9pt; text-transform: uppercase; letter-spacing: 1px; color: #6B7280; margin-bottom: 4px; }
+    .cat-score { font-size: 20pt; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+    .cat-bar { height: 6px; background: #E5E7EB; border-radius: 99px; margin-top: 8px; }
+    .cat-bar-fill { height: 100%; background: var(--orange); border-radius: 99px; }
+
+    /* ---- RISQUES ---- */
+    .risk-card {
+      border-left: 4px solid;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      border-radius: 0 8px 8px 0;
+      background: var(--gray);
+    }
+    .risk-critical { border-color: var(--red); }
+    .risk-high { border-color: #F97316; }
+    .risk-medium { border-color: var(--yellow); }
+    .risk-low { border-color: var(--green); }
+    .risk-title { font-weight: 600; font-size: 11pt; }
+    .risk-impact { font-size: 9pt; color: #6B7280; margin-top: 4px; }
+    .severity-badge {
+      display: inline-block;
+      font-size: 8pt;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      float: right;
+    }
+    .badge-critical { background: #FEE2E2; color: var(--red); }
+    .badge-high { background: #FFEDD5; color: #EA580C; }
+    .badge-medium { background: #FEF9C3; color: #B45309; }
+    .badge-low { background: #DCFCE7; color: #15803D; }
+
+    /* ---- RECOMMANDATIONS ---- */
+    .reco-card {
+      background: var(--gray);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .reco-number {
+      width: 32px; height: 32px;
+      background: var(--orange);
+      color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14pt;
+      float: left;
+      margin-right: 16px;
+    }
+    .reco-title { font-size: 13pt; font-weight: 700; }
+    .reco-meta { font-size: 9pt; color: #6B7280; margin-top: 4px; }
+    .reco-desc { margin-top: 10px; font-size: 10pt; clear: left; }
+    .reco-gain {
+      display: inline-block;
+      background: #DCFCE7;
+      color: #15803D;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 9pt;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    /* ---- MÉTRIQUES ---- */
+    .metrics-row { display: flex; gap: 16px; margin-bottom: 24px; }
+    .metric-box { flex: 1; background: var(--gray); border-radius: 8px; padding: 16px; text-align: center; }
+    .metric-value { font-size: 18pt; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+    .metric-label { font-size: 9pt; color: #6B7280; margin-top: 4px; }
+
+    /* ---- FOOTER / HEADER ---- */
+    @page {
+      margin: 15mm 15mm 20mm;
+      @bottom-right {
+        content: "Page " counter(page) " — CONFIDENTIEL";
+        font-size: 8pt;
+        color: #9CA3AF;
+        font-family: 'Inter', sans-serif;
+      }
+      @bottom-left {
+        content: "Nexus-Diagnostix — {{ report_id[:8] }} — {{ generated_at }}";
+        font-size: 8pt;
+        color: #9CA3AF;
+        font-family: 'Inter', sans-serif;
+      }
+    }
+
+    /* ---- RÉSUMÉ NARRATIF ---- */
+    .narrative { font-size: 10pt; line-height: 1.7; color: #374151; margin-bottom: 20px; }
+    .highlight-box {
+      border: 2px solid var(--orange);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      background: #FFF7ED;
+    }
+    .highlight-box p { font-weight: 600; color: var(--black); }
+  </style>
+</head>
+<body>
+
+<!-- WATERMARK -->
+<div class="cover-watermark">CONFIDENTIEL</div>
+
+<!-- PAGE DE GARDE -->
+<div class="cover">
+  <div>
+    <div class="cover-logo">NexusRH</div>
+    <div class="cover-title">Rapport<br>Nexus-Diagnostix</div>
+    <div class="cover-subtitle">Diagnostic de maturité digitale RH</div>
+  </div>
+  <div class="cover-meta">
+    <p><strong>Secteur :</strong> {{ sector or 'Non précisé' }}</p>
+    <p><strong>Taille :</strong> {{ company_size or 'Non précisée' }}</p>
+    <p><strong>Date :</strong> {{ generated_at }}</p>
+    <p><strong>ID rapport :</strong> {{ report_id }}</p>
+  </div>
+</div>
+
+<!-- PAGE 2 : SYNTHÈSE EXÉCUTIVE -->
+<div class="page">
+  <div class="section-title">Synthèse exécutive</div>
+
+  <div class="score-card">
+    <div class="score-number">{{ global_score | round(1) }}</div>
+    <div class="score-label">Score de maturité digitale RH / 100</div>
+    <div class="maturity-badge">{{ maturity_level_label }}</div>
+  </div>
+
+  <div class="cat-grid">
+    {% for cat_name, cat_score in scores_by_category.items() %}
+    <div class="cat-card">
+      <div class="cat-name">{{ cat_name }}</div>
+      <div class="cat-score">{{ cat_score | round(1) }}</div>
+      <div class="cat-bar"><div class="cat-bar-fill" style="width: {{ cat_score }}%"></div></div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <p class="narrative">{{ executive_summary }}</p>
+</div>
+
+<!-- PAGE 3 : INDICATEURS CLÉS -->
+<div class="page">
+  <div class="section-title">Indicateurs clés</div>
+
+  <div class="metrics-row">
+    <div class="metric-box">
+      <div class="metric-value" style="color: {% if risk_score > 70 %}#DC2626{% elif risk_score > 40 %}#D97706{% else %}#16A34A{% endif %}">{{ risk_score | round(1) }}</div>
+      <div class="metric-label">Score de risque / 100</div>
+    </div>
+    <div class="metric-box">
+      <div class="metric-value">{{ "{:,.0f}".format(financial_exposure) }}</div>
+      <div class="metric-label">Exposition financière (FCFA)</div>
+    </div>
+    <div class="metric-box">
+      <div class="metric-value">{{ (digital_gap_pct | round(1)) }}%</div>
+      <div class="metric-label">Gap digital vs IA-Native</div>
+    </div>
+    <div class="metric-box">
+      <div class="metric-value">{% if turnover_risk_proba is not none %}{{ (turnover_risk_proba * 100) | round(1) }}%{% else %}N/A{% endif %}</div>
+      <div class="metric-label">Risque turnover (12 mois)</div>
+    </div>
+  </div>
+
+  <p class="narrative">{{ digital_gap_narrative }}</p>
+</div>
+
+<!-- PAGE 4-5 : RISQUES DÉTECTÉS -->
+<div class="page">
+  <div class="section-title">Risques réglementaires détectés</div>
+
+  {% if risks_detected %}
+    {% for risk in risks_detected %}
+    <div class="risk-card risk-{{ risk.severity | lower }}">
+      <span class="severity-badge badge-{{ risk.severity | lower }}">{{ risk.severity }}</span>
+      <div class="risk-title">{{ risk.title }}</div>
+      <div class="risk-impact">
+        Code : {{ risk.code }} &nbsp;|&nbsp;
+        Impact estimé : {{ "{:,.0f}".format(risk.fcfa_impact) }} FCFA
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p style="color: #16A34A; font-weight: 600;">Aucun risque réglementaire critique détecté. Continuez à maintenir ce niveau de conformité.</p>
+  {% endif %}
+
+  <div style="margin-top: 24px;">
+    <p class="narrative">{{ risk_narrative }}</p>
+  </div>
+</div>
+
+<!-- PAGE 6-7 : RECOMMANDATIONS -->
+<div class="page">
+  <div class="section-title">Recommandations stratégiques</div>
+
+  {% for reco in recommendations %}
+  <div class="reco-card">
+    <div class="reco-number">{{ reco.priority }}</div>
+    <div>
+      <div class="reco-title">{{ reco.title }}</div>
+      <div class="reco-meta">
+        Module NexusRH : {{ reco.nexusrh_module }} &nbsp;|&nbsp;
+        Délai : {{ reco.implementation_weeks }} semaines
+      </div>
+    </div>
+    <div class="reco-desc">{{ reco.description }}</div>
+    <div class="reco-gain">Gain estimé : {{ "{:,.0f}".format(reco.expected_gain_fcfa) }} FCFA</div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- PAGE 8 : PLAN D'ACTION + ANNEXES -->
+<div class="page">
+  <div class="section-title">Appel à l'action</div>
+
+  <div class="highlight-box">
+    <p>{{ key_takeaway }}</p>
+  </div>
+
+  <div style="margin-top: 40px;">
+    <div class="section-title" style="font-size: 12pt;">Méthodologie</div>
+    <p class="narrative">
+      Ce rapport est généré par Nexus-Diagnostix, l'outil d'auto-diagnostic de maturité digitale RH d'OpenLab Consulting.
+      Le score est calculé selon une méthode AHP (Analytic Hierarchy Process) pondérée, combinant 20 critères répartis
+      en 4 dimensions : Fiscale (20%), Sociale (20%), Conformité (20%), Digitale (40%).
+      Les risques sont calculés à partir des barèmes de redressement CNPS/DGI et des incidents observés chez les clients OpenLab CI.
+      Les prédictions ML utilisent un modèle Random Forest entraîné sur données synthétiques calibrées expert.
+    </p>
+  </div>
+
+  <div style="margin-top: 30px; border-top: 1px solid #E5E7EB; padding-top: 20px; font-size: 8pt; color: #9CA3AF;">
+    <p>Ce rapport est confidentiel et destiné à l'usage exclusif du destinataire.
+    Données traitées conformément à la Loi n°2013-450 (ARTCI).
+    Aucune donnée nominative n'est conservée sans consentement explicite.
+    © 2026 OpenLab Consulting — NexusRH CI</p>
+  </div>
+</div>
+
+</body>
+</html>

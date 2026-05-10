@@ -1,0 +1,307 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Palette Nexus-Diagnostix — direction artistique éditoriale
+ * Inspirée des couleurs de la terre ivoirienne et du papier de qualité.
+ *
+ * - Bone        #F4EFE6  — fond principal, ivoire chaud (≠ blanc plat)
+ * - Bone-dark   #ECE5D8  — surfaces secondaires, cards subtiles
+ * - Ink         #181613  — texte principal, presque-noir chaud
+ * - Ink-soft    #4A4640  — texte secondaire
+ * - Clay        #C8553D  — accent principal, terre cuite (≠ orange criard)
+ * - Clay-deep   #A03E2C  — hover, états actifs
+ * - Sage        #6B7A5A  — accent secondaire, vert sauge
+ * - Sand        #D9C9A3  — détails décoratifs, lignes
+ */
+
+@layer base {
+  :root {
+    --bone:        #F4EFE6;
+    --bone-dark:   #ECE5D8;
+    --bone-card:   #FAF6EE;
+    --ink:         #181613;
+    --ink-soft:    #4A4640;
+    --ink-mute:    #8A847A;
+    --clay:        #C8553D;
+    --clay-deep:   #A03E2C;
+    --clay-soft:   #E8C5B8;
+    --sage:        #6B7A5A;
+    --sand:        #D9C9A3;
+    --line:        #D9D2C2;
+
+    /* Compatibilité shadcn/ui (mapping HSL) */
+    --background: 35 38% 93%;
+    --foreground: 30 13% 9%;
+    --card: 36 50% 96%;
+    --card-foreground: 30 13% 9%;
+    --primary: 9 53% 51%;
+    --primary-foreground: 36 50% 96%;
+    --secondary: 38 35% 88%;
+    --secondary-foreground: 30 13% 9%;
+    --muted: 38 35% 88%;
+    --muted-foreground: 33 7% 51%;
+    --accent: 9 49% 88%;
+    --accent-foreground: 9 60% 30%;
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 36 50% 96%;
+    --border: 39 22% 80%;
+    --input: 39 22% 80%;
+    --ring: 9 53% 51%;
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--bone);
+    color: var(--ink);
+    font-family: "Geist", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv11";
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    /* Texture papier ultra subtile pour casser le plat absolu */
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(24, 22, 19, 0.025) 1px, transparent 0);
+    background-size: 24px 24px;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Fraunces", Georgia, serif;
+    font-feature-settings: "ss01", "ss02";
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  /* Sélection de texte au goût de la maison */
+  ::selection {
+    background-color: var(--clay);
+    color: var(--bone);
+  }
+
+  /* Focus accessible et premium */
+  *:focus-visible {
+    outline: 2px solid var(--clay);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Scrollbar discrète */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 10px;
+    border: 2px solid var(--bone);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--ink-mute);
+  }
+}
+
+@layer components {
+  /* === Boutons === */
+  .btn-clay {
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5
+           text-[15px] font-medium tracking-tight
+           transition-all duration-300 ease-out
+           rounded-full;
+    background-color: var(--ink);
+    color: var(--bone);
+    box-shadow:
+      0 1px 2px rgba(24, 22, 19, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+  .btn-clay:hover {
+    background-color: var(--clay-deep);
+    transform: translateY(-1px);
+    box-shadow:
+      0 8px 24px -8px rgba(160, 62, 44, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+  .btn-clay:active {
+    transform: translateY(0);
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3
+           text-[14px] font-medium tracking-tight
+           transition-all duration-200 ease-out
+           rounded-full;
+    color: var(--ink-soft);
+  }
+  .btn-ghost:hover {
+    color: var(--ink);
+    background-color: var(--bone-dark);
+  }
+
+  /* === Carte papier === */
+  .paper {
+    background-color: var(--bone-card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+  }
+
+  /* === Tag / Pill === */
+  .pill {
+    @apply inline-flex items-center gap-2 px-3 py-1
+           text-[11px] font-medium uppercase tracking-[0.12em];
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+  }
+
+  .pill-clay::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background-color: var(--clay);
+    border-radius: 50%;
+  }
+
+  /* === Texte hero éditorial === */
+  .hero-headline {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    /* Activation des fonctionnalités optical-sizing variables de Fraunces */
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+  }
+
+  .hero-headline em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--clay);
+    /* Subtile correction optique pour l'italique de Fraunces */
+    font-variation-settings: "opsz" 144, "SOFT" 100;
+  }
+
+  /* === Numéro de question, style éditorial === */
+  .question-number {
+    font-family: "Fraunces", Georgia, serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--clay);
+    letter-spacing: -0.05em;
+    line-height: 0.85;
+  }
+
+  /* === Chiffres tabulaires (KPIs, scores) === */
+  .tabular {
+    font-family: "JetBrains Mono", monospace;
+    font-feature-settings: "tnum", "ss01";
+    letter-spacing: -0.02em;
+  }
+
+  /* === Ligne décorative === */
+  .rule {
+    border: none;
+    height: 1px;
+    background-color: var(--line);
+  }
+
+  .rule-clay {
+    border: none;
+    height: 2px;
+    width: 32px;
+    background-color: var(--clay);
+  }
+
+  /* === Carte de réponse (questionnaire) === */
+  .answer-card {
+    @apply relative w-full text-left flex items-center gap-5 px-6 py-5
+           transition-all duration-200 ease-out;
+    background-color: var(--bone-card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--ink);
+  }
+
+  .answer-card::before {
+    content: "";
+    @apply absolute left-0 top-0 bottom-0 w-1
+           transition-all duration-200 ease-out;
+    background-color: transparent;
+  }
+
+  .answer-card:hover {
+    border-color: var(--ink);
+    transform: translateX(4px);
+  }
+  .answer-card:hover::before {
+    background-color: var(--clay);
+  }
+
+  .answer-card[data-selected="true"] {
+    background-color: var(--ink);
+    color: var(--bone);
+    border-color: var(--ink);
+  }
+  .answer-card[data-selected="true"]::before {
+    background-color: var(--clay);
+  }
+
+  .answer-key {
+    @apply flex items-center justify-center w-7 h-7 text-[12px] font-medium
+           transition-colors duration-200;
+    font-family: "JetBrains Mono", monospace;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--ink-soft);
+    background-color: var(--bone);
+  }
+
+  .answer-card[data-selected="true"] .answer-key {
+    background-color: var(--clay);
+    color: var(--bone);
+    border-color: var(--clay);
+  }
+
+  /* === Progress bar éditoriale === */
+  .progress-track {
+    @apply relative w-full h-px overflow-hidden;
+    background-color: var(--line);
+  }
+  .progress-fill {
+    @apply absolute inset-y-0 left-0 transition-all duration-500;
+    background-color: var(--clay);
+    box-shadow: 0 0 0 0.5px var(--clay);
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-pretty  { text-wrap: pretty; }
+
+  /* Animation de noise très subtile pour le grain */
+  .grain {
+    position: relative;
+  }
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.4;
+    mix-blend-mode: multiply;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.094 0 0 0 0 0.086 0 0 0 0 0.075 0 0 0 0.18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}

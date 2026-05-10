@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 4%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 4%;
+    --primary: 16 100% 56%;            /* NexusRH orange */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 0 0% 4%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 16 100% 95%;
+    --accent-foreground: 16 100% 30%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 16 100% 56%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: "Inter", system-ui, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Space Grotesk", "Inter", sans-serif;
+    @apply tracking-tight;
+  }
+
+  /* Focus ring accessible et premium */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-nexus-orange ring-offset-2;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg bg-nexus-orange px-6 py-3
+           font-semibold text-white shadow-sm transition-all duration-200
+           hover:bg-nexus-orange-dark hover:shadow-md
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-lg border border-nexus-gray-dark
+           px-6 py-3 font-semibold text-nexus-black transition-all duration-200
+           hover:bg-nexus-gray;
+  }
+
+  .card-elevated {
+    @apply rounded-xl border border-border bg-card p-6 shadow-sm
+           transition-shadow duration-200 hover:shadow-md;
+  }
+}
