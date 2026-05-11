@@ -5,10 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "nexus-diagnostix.labels" . | nindent 4 }}
-  annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "-5"
-    "helm.sh/hook-delete-policy": before-hook-creation
+
 data:
   ENVIRONMENT: {{ .Values.app.environment | quote }}
   LOG_LEVEL: {{ .Values.app.logLevel | quote }}
