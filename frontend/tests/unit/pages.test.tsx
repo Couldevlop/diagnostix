@@ -34,7 +34,8 @@ vi.mock("@/lib/api", () => ({
 }));
 
 import { api } from "@/lib/api";
-const mockApi = api as { get: ReturnType<typeof vi.fn>; post: ReturnType<typeof vi.fn> };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mockApi = api as any;
 
 function renderInRouter(
   element: React.ReactElement,
