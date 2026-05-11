@@ -105,7 +105,6 @@ describe("DiagnosticStart", () => {
 
   it("appelle POST /sessions et navigue sur succès", async () => {
     mockApi.post.mockResolvedValue({ session_id: "sess-abc123" });
-    const navigateFn = vi.fn();
     render(
       <MemoryRouter initialEntries={["/diagnostic/start"]}>
         <Routes>
