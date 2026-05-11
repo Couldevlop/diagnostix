@@ -11,11 +11,11 @@ image:
   backend:
     repository: ghcr.io/couldevlop/nexus-diagnostix-backend
     tag: "latest"
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   frontend:
     repository: ghcr.io/couldevlop/nexus-diagnostix-frontend
     tag: "latest"
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
 
 # Images publiques sur GHCR — pas de pull secret nécessaire
 imagePullSecrets: []
