@@ -17,9 +17,8 @@ image:
     tag: "latest"
     pullPolicy: IfNotPresent
 
-# Secret pour tirer les images depuis GHCR
-imagePullSecrets:
-  - name: ghcr-secret
+# Images publiques sur GHCR — pas de pull secret nécessaire
+imagePullSecrets: []
 
 # ---------------------------------------------------------------------------
 # Configuration applicative (non-sensible → ConfigMap)
